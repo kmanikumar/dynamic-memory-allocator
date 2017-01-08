@@ -1,8 +1,3 @@
-/**
- * Machine Problem: Malloc
- * CS 241 - Fall 2016
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,6 +16,8 @@ md * tail = NULL;
 md * max = NULL;
 md * max2 = NULL;
 
+
+//helper function for block coalescing
 void coalesce(md * curr){
   md * neighbour= curr->next; //coalesce next neighbour
   if(neighbour && neighbour->free){
@@ -50,6 +47,7 @@ void coalesce(md * curr){
   }
 }
 
+//helper function for block splitting
 void split(md * ret, int size){
   if(!ret){ //null ptr
     return;
@@ -81,11 +79,10 @@ void split(md * ret, int size){
 }
 
 /**
- * Allocate space for array in memory
  *
- * Allocates a block of memory for an array of num elements, each of them size
- * bytes long, and initializes all its bits to zero. The effective result is
- * the allocation of an zero-initialized memory block of (num * size) bytes.
+ * The calloc() function contiguously allocates enough space for count objects 
+ * that are size bytes of memory each and returns a pointer to the allocated 
+ * memory. The allocated memory is filled with bytes of value zero.
  *
  * @param num
  *    Number of elements to be allocated.
@@ -95,13 +92,8 @@ void split(md * ret, int size){
  * @return
  *    A pointer to the memory block allocated by the function.
  *
- *    The type of this pointer is always void*, which can be cast to the
- *    desired type of data pointer in order to be dereferenceable.
- *
- *    If the function failed to allocate the requested block of memory, a
- *    NULL pointer is returned.
- *
- * @see http://www.cplusplus.com/reference/clibrary/cstdlib/calloc/
+ *    If the function failed to allocate the requested block of memory,
+ *    a null pointer is returned.
  */
 void *calloc(size_t num, size_t size){
   // implement calloc!
@@ -115,9 +107,8 @@ void *calloc(size_t num, size_t size){
 /**
  * Allocate memory block
  *
- * Allocates a block of size bytes of memory, returning a pointer to the
- * beginning of the block.  The content of the newly allocated block of
- * memory is not initialized, remaining with indeterminate values.
+ * The malloc() function allocates size bytes of memory and returns a 
+ * pointer to the allocated memory.
  *
  * @param size
  *    Size of the memory block, in bytes.
@@ -125,13 +116,8 @@ void *calloc(size_t num, size_t size){
  * @return
  *    On success, a pointer to the memory block allocated by the function.
  *
- *    The type of this pointer is always void*, which can be cast to the
- *    desired type of data pointer in order to be dereferenceable.
- *
  *    If the function failed to allocate the requested block of memory,
  *    a null pointer is returned.
- *
- * @see http://www.cplusplus.com/reference/clibrary/cstdlib/malloc/
  */
 void *malloc(size_t size){
   // implement malloc!
@@ -201,13 +187,8 @@ void *malloc(size_t size){
 /**
  * Deallocate space in memory
  *
- * A block of memory previously allocated using a call to malloc(),
- * calloc() or realloc() is deallocated, making it available again for
- * further allocations.
- *
- * Notice that this function leaves the value of ptr unchanged, hence
- * it still points to the same (now invalid) location, and not to the
- * null pointer.
+ * The free() function deallocates the memory allocation pointed to 
+ * by ptr. If ptr is a NULL pointer, no operation is performed.
  *
  * @param ptr
  *    Pointer to a memory block previously allocated with malloc(),
@@ -225,24 +206,17 @@ void free(void *ptr){
 }
 
 /**
- * Reallocate memory block
- *
- * The size of the memory block pointed to by the ptr parameter is changed
- * to the size bytes, expanding or reducing the amount of memory available
- * in the block.
- *
- * The function may move the memory block to a new location, in which case
- * the new location is returned. The content of the memory block is preserved
- * up to the lesser of the new and old sizes, even if the block is moved. If
- * the new size is larger, the value of the newly allocated portion is
- * indeterminate.
- *
- * In case that ptr is NULL, the function behaves exactly as malloc, assigning
- * a new block of size bytes and returning a pointer to the beginning of it.
- *
- * In case that the size is 0, the memory previously allocated in ptr is
- * deallocated as if a call to free was made, and a NULL pointer is returned.
- *
+ * The realloc() function tries to change the size of the allocation pointed 
+ * to by ptr to size, and returns ptr.  If there is not enough room to
+ * enlarge the memory allocation pointed to by ptr, realloc() creates a new 
+ * allocation, copies as much of the old data pointed to by ptr as will fit
+ * to the new allocation, frees the old allocation, and returns a pointer to 
+ * the allocated memory.  If ptr is NULL, realloc() is identical to a call
+ * to malloc() for size bytes.  If size is zero and ptr is not NULL, a new, 
+ * minimum sized object is allocated and the original object is freed.  When
+ * extending a region allocated with calloc(3), realloc(3) does not guarantee 
+ * that the additional memory is also zero-filled.
+
  * @param ptr
  *    Pointer to a memory block previously allocated with malloc(), calloc()
  *    or realloc() to be reallocated.
@@ -260,14 +234,9 @@ void free(void *ptr){
  *    A pointer to the reallocated memory block, which may be either the
  *    same as the ptr argument or a new location.
  *
- *    The type of this pointer is void*, which can be cast to the desired
- *    type of data pointer in order to be dereferenceable.
- *
  *    If the function failed to allocate the requested block of memory,
  *    a NULL pointer is returned, and the memory block pointed to by
  *    argument ptr is left unchanged.
- *
- * @see http://www.cplusplus.com/reference/clibrary/cstdlib/realloc/
  */
 void *realloc(void *ptr, size_t size){
   // implement realloc!
